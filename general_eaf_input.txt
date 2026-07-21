@@ -1,0 +1,71 @@
+# General EAF example input.
+# Lines beginning with # or ! are ignored by eaf_general_balance.f.
+#
+# Overall idea:
+# - Components/elements are conserved in the least-squares mass balance.
+# - Stream SIDE is 1 for input and -1 for output.
+# - FIXED is 1 for known mass and 0 for mass solved by least squares.
+# - HSGN controls sensible heat: positive demand, negative credit, zero ignored.
+# - Heat terms use: name stream_index factor coeff_J_per_kg const_kWh.
+#
+GENERAL_EAF_EXAMPLE_BASED_ON_RECONSTRUCTED_SCAN
+
+# Number of conserved components/elements.
+8
+
+# Component_name balance_weight
+C    1.0
+Mn   1.0
+Si   1.0
+Fe   1.0
+O    1.0
+N    1.0
+H    1.0
+CaO  1.0
+
+# Number of streams.
+13
+
+# Stream format:
+# name side fixed mass hsgn temp_K HA HB HC HD frac_C frac_Mn frac_Si
+#      frac_Fe frac_O frac_N frac_H frac_CaO
+#
+# Inputs: charge materials and process streams.
+SCRAP       1 0 0.0       0.0 298.15 0.0 0.0 0.0 0.0 0.0075 0.0075 0.0015 0.9830 0.000000 0.0000 0.0000 0.000
+FEMN        1 0 0.0       0.0 298.15 0.0 0.0 0.0 0.0 0.0680 0.7500 0.0050 0.1720 0.000000 0.0000 0.0000 0.000
+ELECTRODES 1 1 5.5       0.0 298.15 0.0 0.0 0.0 0.0 1.0000 0.0000 0.0000 0.0000 0.000000 0.0000 0.0000 0.000
+CARBON_INJ 1 1 0.0       0.0 298.15 0.0 0.0 0.0 0.0 1.0000 0.0000 0.0000 0.0000 0.000000 0.0000 0.0000 0.000
+OXYGEN      1 1 2.687     0.0 298.15 0.0 0.0 0.0 0.0 0.0000 0.0000 0.0000 0.0000 1.000000 0.0000 0.0000 0.000
+AIR         1 0 0.0       0.0 298.15 0.0 0.0 0.0 0.0 0.0000 0.0000 0.0000 0.0000 0.233000 0.7670 0.0000 0.000
+MOISTURE    1 1 3.7       0.0 298.15 0.0 0.0 0.0 0.0 0.0000 0.0000 0.0000 0.0000 0.888000 0.0000 0.1120 0.000
+FUEL_NG     1 1 0.0       0.0 298.15 0.0 0.0 0.0 0.0 0.7490 0.0000 0.0000 0.0000 0.000000 0.0000 0.2510 0.000
+LIME_CAO    1 0 0.0       0.0 298.15 0.0 0.0 0.0 0.0 0.0000 0.0000 0.0000 0.0000 0.000000 0.0000 0.0000 1.000
+
+# Outputs: steel target, slag target chemistry, off-gas, dust.
+STEEL      -1 1 1000.0    1.0 1873.0 -13456.8 747.6 0.0 0.0 0.0030 0.0073 0.0000 0.9890 0.000000 0.0000 0.0000 0.000
+SLAG       -1 0 0.0       1.0 1873.0      0.0 818.0 0.0 0.0 0.0000 0.0952 0.02462 0.1394 0.101825 0.0000 0.0000 0.639
+GAS        -1 0 0.0       1.0 1823.0      0.0 1047.0 0.0 0.0 0.09219 0.0000 0.0000 0.0000 0.207394 0.6965 0.0039 0.000
+DUST       -1 1 0.0       1.0 1873.0      0.0 800.0 0.0 0.0 0.0000 0.0000 0.0000 0.7000 0.300000 0.0000 0.0000 0.000
+
+# Number of soft mass targets or measurements.
+# Format: name stream_index target_mass_kg weight
+# Weight is normally 1/sigma.  A weight of 0.2 means about 5 kg sigma.
+4
+GAS_MEAS    12 106.25   0.20
+SLAG_TARGET 11 63.3136  0.20
+AIR_MEAS     6 96.61    0.20
+LIME_TARGET  9 40.45    0.20
+
+# Number of general heat terms.
+# Format: name stream_index factor coeff_J_per_kg const_kWh
+# stream_index=0 makes a pure constant term.
+# Positive kWh is demand/loss.  Negative kWh is supply or exothermic credit.
+8
+ELECTRIC_INPUT       0 0.0 0.0          -360.0
+PANEL_LOSS           0 0.0 0.0            35.0
+COOLING_LOSS         0 0.0 0.0            25.0
+ROOF_WALL_LOSS       0 0.0 0.0            10.0
+FUEL_HEATING_VALUE   8 1.0 -50000000.0     0.0
+ELEC_C_TO_CO         3 0.5  -9315630.0     0.0
+ELEC_C_TO_CO2        3 0.5 -32866380.07    0.0
+SLAG_REACTION_ALLOW 11 1.0  -500000.0      0.0
