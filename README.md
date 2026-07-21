@@ -413,7 +413,3 @@ These are set near the top of `eaf_general_balance.f`:
 
 Increase them and recompile if needed.
 
-## License
-
-Choose and add a license before publishing publicly. If no license is included,
-others may be unable to legally reuse the code.
